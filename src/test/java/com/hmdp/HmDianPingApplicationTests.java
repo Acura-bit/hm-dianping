@@ -11,6 +11,7 @@ import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
+import javax.lang.model.SourceVersion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,5 +102,22 @@ class HmDianPingApplicationTests {
             // ② 然后一次性写入一对键值对中，这样可以减少 I/O
             stringRedisTemplate.opsForGeo().add(key, locations);
         }
+    }
+
+    @Test
+    void testHyperLogLog() {
+        // TODO 数组下标骚操作
+        String[] values = new String[1000];
+        int j = 0;
+        for (int i = 0; i < 1000000; i++) {
+            j = i % 1000;
+            values[j] = "user_" + i;
+            if(j == 999){
+                // 发送到 Redis
+                stringRedisTemplate.opsForHyperLogLog().add("hl2", values);
+            }
+        }
+        Long count = stringRedisTemplate.opsForHyperLogLog().size("hl2");
+        System.out.println("count = " + count);
     }
 }
