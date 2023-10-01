@@ -43,7 +43,8 @@ public class Blog implements Serializable {
     /**
      * 用户图标
      */
-    @TableField(exist = false)
+    // TODO
+    @TableField(exist = false) // 不属于表 tb_blog
     private String icon;
     /**
      * 用户姓名
